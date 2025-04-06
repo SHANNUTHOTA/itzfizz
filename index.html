@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Itzfizz</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <style>
+    :root {
+      --primary-color: #D4AF37;
+      --secondary-color: #1E3A8A;
+      --text-color: #FFFFFF;
+      --bg-color: #0A0F1F;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      overflow: hidden;
+    }
+
+    body.loaded {
+      overflow-y: auto;
+    }
+
+    .preloader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background-color: var(--bg-color);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .preloader-text {
+      display: flex;
+      font-weight: 700;
+      font-size: 3rem;
+      text-transform: uppercase;
+      letter-spacing: 5px;
+      color: white;
+    }
+
+    .preloader-text span {
+      display: inline-block;
+      opacity: 0;
+      transform: scale(0.8);
+    }
+
+    .line {
+      width: 0%;
+      height: 4px;
+      background-color: var(--primary-color);
+      margin-top: 20px;
+      box-shadow: 0 0 10px var(--primary-color);
+      border-radius: 10px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .shine {
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(120deg, transparent, #fff, transparent);
+      animation: shine 1s ease-out forwards;
+    }
+
+    @keyframes shine {
+      to {
+        left: 120%;
+      }
+    }
+
+    .preloader-top,
+    .preloader-bottom {
+      position: fixed;
+      width: 100%;
+      height: 50vh;
+      background-color: var(--bg-color);
+      z-index: 9998;
+      transition: transform 1s ease;
+    }
+
+    .preloader-top {
+      top: 0;
+    }
+
+    .preloader-bottom {
+      bottom: 0;
+    }
+
+    .toggler-icon span {
+      display: block;
+      width: 25px;
+      height: 3px;
+      background-color: white;
+      margin: 5px auto;
+      transition: all 0.3s ease-in-out;
+      border-radius: 2px;
+    }
+
+    .navbar-toggler.open .bar1 {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    .navbar-toggler.open .bar2 {
+      opacity: 0;
+    }
+
+    .navbar-toggler.open .bar3 {
+      transform: rotate(-45deg) translate(6px, -6px);
+    }
+
+    .collapse.navbar-collapse {
+      transition: all 0.4s ease-in-out;
+      transform-origin: top;
+    }
+
+    .nav-link {
+      position: relative;
+      display: inline-block;
+      padding-bottom: 5px;
+      transition: color 0.3s ease;
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      left: 0;
+      bottom: 0;
+      background-color: var(--primary-color);
+      /* or any color you like */
+      transition: width 0.3s ease;
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    .glass-navbar {
+      background-color: rgba(10, 15, 31, 0.85);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .navbar-nav .nav-item {
+      margin: 10px 0;
+    }
+
+    @media (max-width: 991px) {
+      .navbar-collapse {
+        background-color: rgba(10, 15, 31, 0.95);
+        padding: 1rem 1.5rem;
+        border-radius: 0 0 10px 10px;
+      }
+
+      .navbar-nav {
+        align-items: flex-start;
+      }
+
+      .navbar-nav .nav-link {
+        width: 100%;
+        padding: 10px 0;
+        font-size: 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .navbar-toggler {
+        border: none;
+      }
+
+      .toggler-icon span {
+        background-color: var(--primary-color);
+      }
+    }
+
+    .hero-section {
+      position: relative;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+      opacity: 0;
+    }
+
+    .hero-title {
+      font-size: 6rem;
+      text-transform: uppercase;
+      font-weight: 900;
+      z-index: 2;
+    }
+
+    .hero-title .highlight {
+      color: var(--primary-color);
+      text-shadow: 0 0 10px var(--primary-color);
+    }
+
+    .hero-subtitle {
+      color: #ccc;
+      font-weight: 300;
+      margin-top: 1rem;
+      font-size: 1.1rem;
+    }
+
+    #image-info {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: none;
+      text-align: center;
+      z-index: 20;
+    }
+
+    #image-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--primary-color);
+    }
+
+    #image-desc {
+      font-size: 1.25rem;
+      font-weight: 400;
+      color: #ccc;
+      margin-top: 0.5rem;
+    }
+
+    .overlay-image {
+      position: absolute;
+      width: 280px;
+      opacity: 0.3;
+      transition: all 0.3s;
+      pointer-events: auto;
+    }
+
+    .top-left {
+      top: 10%;
+      left: 10%;
+    }
+
+    .top-right {
+      top: 10%;
+      right: 10%;
+    }
+
+    .bottom-left {
+      bottom: 10%;
+      left: 10%;
+    }
+
+    .bottom-right {
+      bottom: 10%;
+      right: 10%;
+    }
+
+    .vector-like {
+      filter: grayscale(100%) contrast(200%) brightness(1.2);
+      opacity: 0.2;
+      transform: scale(0.95);
+    }
+
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 3.5rem;
+      }
+
+      .overlay-image {
+        width: 180px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-title {
+        font-size: 2.5rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="preloader-top"></div>
+  <div class="preloader-bottom"></div>
+  <div class="preloader">
+    <div class="preloader-text">
+      <span>I</span><span>t</span><span>z</span><span>f</span><span>i</span><span>z</span><span>z</span>
+    </div>
+    <div class="line">
+      <div class="shine"></div>
+    </div>
+  </div>
+  <nav class="navbar glass-navbar fixed-top navbar-expand-lg px-4 py-3">
+    <a class="navbar-brand text-warning fw-bold fs-3" href="#">Itzfizz</a>
+    <button class="navbar-toggler custom-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <nav class="navbar glass-navbar fixed-top navbar-expand-lg px-4 py-3 shadow-sm">
+        <a class="navbar-brand text-warning fw-bold fs-3" href="#">Itzfizz</a>
+        <div class="toggler-icon">
+          <span class="bar1"></span>
+          <span class="bar2"></span>
+          <span class="bar3"></span>
+        </div>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <ul class="navbar-nav gap-4">
+        <li class="nav-item">
+          <a class="nav-link active text-white nav-anim" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white nav-anim" href="#">About</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white nav-anim" href="#">Projects</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white nav-anim" href="#">Contact</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <section class="hero-section">
+    <div class="container-fluid text-center">
+      <h1 class="hero-title">Crafting <span class="highlight">Futures</span><br>Through <span
+          class="highlight">Design</span><br> And <span class="highlight">Code</span></h1>
+      <p class="hero-subtitle">We build experiences that redefine digital.</p>
+      <div class="corner-images">
+        <img src="image2.avif" class="overlay-image top-left" alt="Overlay Image 2" data-title="Design Magic"
+          data-description="Where ideas take flight.">
+        <img src="image1.jpeg" class="overlay-image top-right" alt="Overlay Image 1" data-title="Code Craft"
+          data-description="Turning logic into art.">
+        <img src="image3.jpeg" class="overlay-image bottom-left" alt="Overlay Image 3" data-title="UX Mastery"
+          data-description="Creating seamless experiences.">
+        <img src="image4.jpeg" class="overlay-image bottom-right" alt="Overlay Image 4" data-title="Innovation Hub"
+          data-description="Ideas. Iteration. Impact.">
+        <div id="image-info" style="display: none; margin-top: 2rem;">
+          <h1 id="image-title" class="text-warning"></h1>
+          <h2 id="image-desc" style="color: #ccc;"></h2>
+        </div>
+      </div>
+    </div>
+  </section>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const spans = document.querySelectorAll('.preloader-text span');
+      const line = document.querySelector('.line');
+      const topPanel = document.querySelector('.preloader-top');
+      const bottomPanel = document.querySelector('.preloader-bottom');
+      const preloader = document.querySelector('.preloader');
+      const heroSection = document.querySelector('.hero-section');
+      const heroTitle = document.querySelector('.hero-title');
+      const heroSubtitle = document.querySelector('.hero-subtitle');
+      const overlayImages = document.querySelectorAll('.overlay-image');
+      const infoBox = document.getElementById('image-info');
+      const titleEl = document.getElementById('image-title');
+      const descEl = document.getElementById('image-desc');
+      gsap.to(spans, {
+        opacity: 1,
+        scale: 1,
+        duration: 0.3,
+        stagger: 0.08,
+        ease: "back.out(1.7)",
+        onComplete: () => {
+          gsap.to(spans, {
+            color: "var(--primary-color)",
+            duration: 0.6,
+            onComplete: () => {
+              gsap.to(line, {
+                width: "100%",
+                duration: 0.6,
+                onComplete: () => {
+                  gsap.to([topPanel, bottomPanel], {
+                    y: (i) => i === 0 ? "-100%" : "100%",
+                    duration: 0.8,
+                    ease: "power2.inOut"
+                  });
+                  gsap.to(preloader, {
+                    opacity: 0,
+                    duration: 0.5,
+                    delay: 0.3,
+                    onComplete: () => {
+                      document.body.classList.add('loaded');
+                      preloader.style.display = 'none';
+                      gsap.to(heroSection, {
+                        opacity: 1,
+                        duration: 1,
+                        ease: "power2.out"
+                      });
+                      gsap.fromTo(heroTitle,
+                        { opacity: 0, y: 50 },
+                        { opacity: 1, y: 0, duration: 1.5, delay: 0.5, ease: "power3.out" }
+                      );
+                      gsap.fromTo(overlayImages,
+                        { opacity: 0, scale: 0.9 },
+                        { opacity: 0.3, scale: 1, duration: 1.5, delay: 1, ease: "power3.out", stagger: 0.3 }
+                      );
+                    }
+                  });
+                }
+              });
+            }
+          });
+        }
+      });
+      const toggler = document.querySelector(".navbar-toggler");
+      const collapse = document.getElementById("navbarNav");
+      if (toggler) {
+        toggler.addEventListener("click", function () {
+          this.classList.toggle("open");
+        });
+      }
+      if (collapse) {
+        collapse.addEventListener("hidden.bs.collapse", () => {
+          toggler.classList.remove("open");
+        });
+      }
+      const navLinks = document.querySelectorAll(".nav-link");
+      navLinks.forEach(link => {
+        link.addEventListener("click", function () {
+          navLinks.forEach(l => l.classList.remove("active"));
+          this.classList.add("active");
+        });
+      });
+      overlayImages.forEach(image => {
+        image.addEventListener('mouseenter', () => {
+          const title = image.getAttribute('data-title');
+          const desc = image.getAttribute('data-description');
+          overlayImages.forEach(img => {
+            if (img !== image) {
+              gsap.to(img, { opacity: 0, duration: 0.3 });
+            }
+          });
+          gsap.to(image, { scale: 1.3, opacity: 1, duration: 0.4, zIndex: 10 });
+          gsap.to(heroTitle, { opacity: 0, duration: 0.3 });
+          gsap.to(heroSubtitle, { opacity: 0, duration: 0.3 });
+          titleEl.textContent = title;
+          descEl.textContent = desc;
+          infoBox.style.display = 'block';
+          gsap.fromTo(infoBox, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5 });
+        });
+        image.addEventListener('mousemove', (e) => {
+          const rect = image.getBoundingClientRect();
+          const offsetX = e.clientX - rect.left;
+          const offsetY = e.clientY - rect.top;
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+          const moveX = (offsetX - centerX) * 0.05;
+          const moveY = (offsetY - centerY) * 0.05;
+          gsap.to(image, {
+            x: moveX,
+            y: moveY,
+            duration: 0.3,
+            ease: 'power2.out'
+          });
+        });
+        image.addEventListener('mouseleave', () => {
+          overlayImages.forEach(img => {
+            gsap.to(img, { opacity: 0.3, scale: 1, x: 0, y: 0, zIndex: 1, duration: 0.3 });
+          });
+          gsap.to(heroTitle, { opacity: 1, duration: 0.3 });
+          gsap.to(heroSubtitle, { opacity: 1, duration: 0.3 });
+          gsap.to(infoBox, {
+            opacity: 0,
+            y: 10,
+            duration: 0.3,
+            onComplete: () => {
+              infoBox.style.display = 'none';
+            }
+          });
+        });
+      });
+    });
+  </script>
+</body>
+</html>
